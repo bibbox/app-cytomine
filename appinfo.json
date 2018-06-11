@@ -1,0 +1,10 @@
+{
+		"name": "Cytomine",
+		"short_name": "Cytomine",
+		"version": "V.1.0",
+		"description": "Open-source rich internet application for collaborative analysis of multi-gigapixel images",
+        "short_description": "Open-source rich internet application for collaborative analysis of multi-gigapixel images",
+		"catalogue_url": "URL to biobankapps, if applicaple",
+		"application_url": "https://cytomine.coop/",
+		"tags": ["Digital Pathology", "Tag2"]
+}
