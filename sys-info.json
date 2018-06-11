@@ -1,4 +1,4 @@
 {
-  runningcontainers:["§§INSTANCE-appcontainer1", "§§INSTANCE-appcontainer2"],
+  runningcontainers:["§§INSTANCE-cytomine-memcached", "§§INSTANCE-cytomine-rabbitmq", "§§INSTANCE-cytomine-pgdb", "§§INSTANCE-cytomine-mongodb"],
   supportcontainers:["§§INSTANCE-app-data"]    
 }

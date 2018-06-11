@@ -6,55 +6,201 @@ networks:
 
 services:
 
-  §§INSTANCE-container1:
-    image: bibbox/app-image
-    container_name:  §§INSTANCE-container1
+  §§INSTANCE-cytomine-core:
+    image: cytomine/core:v1.1.1
+    container_name: §§INSTANCE-cytomine-core
     restart: unless-stopped
     networks:
       - bibbox-default-network
-    links:
-      - §§INSTANCE-lapp-db:app-db
+    link:
+      - §§INSTANCE-cytomine-iris:iris
+      - §§INSTANCE-cytomine-ims:ims
+      - §§INSTANCE-cytomine-retrieval:retrieval
+      - §§INSTANCE-cytomine-iipCyto:iipCyto
+      - §§INSTANCE-cytomine-core:core
+      - §§INSTANCE-cytomine-iipOff:iipOff
     ports:
-      - "§§PORT1:80"
-    depends_on:
-      - §§INSTANCE-app-db
-      - §§INSTANCE-app-data
+      - "§§PORTWEB:80"
     volumes_from: 
-      - §§INSTANCE-app-data
-
-§§INSTANCE-container2:
-  image: bibbox/app-image2
-  container_name:  §§INSTANCE-container2
-  restart: unless-stopped
-  networks:
-    - bibbox-default-network
-  ports:
-    - "§§PORT2:8000"
-  depends_on:
-    - §§INSTANCE-app-data
-  volumes_from: 
-    - §§INSTANCE-app-data
-
-  §§INSTANCE-app-db:
-    image: mysql:8
-    container_name: §§INSTANCE-imagename-db
+      - §§INSTANCE-cytomine-data
+    depends_on:
+      - §§INSTANCE-cytomine-data
+      
+  §§INSTANCE-cytomine-nginx:
+    image: cytomine/nginx:v1.1.1
+    container_name: §§INSTANCE-cytomine-nginx
     restart: unless-stopped
     networks:
       - bibbox-default-network
-    user: root
-    environment:
-      - MYSQL_ROOT_PASSWORD=thispasswordisneverusededoutsidethecontainer
-      - MYSQL_DATABASE=§§MYSQL_DATABASE_NAME
-      - MYSQL_USER=§§MYSQL_DATABASE_USER
-      - MYSQL_PASSWORD=§§MYSQL_DATABASE_PASSWORD
+    link:
+      - §§INSTANCE-cytomine-pgdb:postgresql
+      - §§INSTANCE-cytomine-mongodb:mongodb
+      - §§INSTANCE-cytomine-rabbitmq:rabbitmq
     volumes_from: 
-      - §§INSTANCE-app-data
+      - §§INSTANCE-cytomine-data
     depends_on:
-      - §§INSTANCE-app-data
+      - §§INSTANCE-cytomine-data
 
-  §§INSTANCE-app-data:
+  §§INSTANCE-cytomine-memcached:
+    image: cytomine/memcached:v1.1.1
+    container_name:  §§INSTANCE-cytomine-memcached
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
+    ports:
+      - "§§PORTMEMCACHED:11211"
+    depends_on:
+      - §§INSTANCE-cytomine-data
+    volumes_from: 
+      - §§INSTANCE-cytomine-data
+
+  §§INSTANCE-cytomine-rabbitmq:
+    image: cytomine/rabbitmq:v1.1.1
+    container_name:  §§INSTANCE-cytomine-rabbitmq
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
+    ports:
+      - "§§PORTRABBITMQ1:6572"
+      - "§§PORTRABBITMQ2:15672"
+    environment:
+      - RABBITMQ_PASS=router
+    depends_on:
+      - §§INSTANCE-cytomine-data
+    volumes_from: 
+      - §§INSTANCE-cytomine-data
+
+  §§INSTANCE-cytomine-pgdb:
+    image: cytomine/postgis:v1.1.1
+    container_name: §§INSTANCE-cytomine-pgdb
+    restart: unless-stopped
+    mem_limit: 8g
+    networks:
+      - bibbox-default-network
+    volumes_from: 
+      - §§INSTANCE-cytomine-data
+    depends_on:
+      - §§INSTANCE-cytomine-data
+      
+  §§INSTANCE-cytomine-mongodb:
+    image: cytomine/mongodb:v1.1.1
+    container_name: §§INSTANCE-cytomine-mongodb
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
+    volumes_from: 
+      - §§INSTANCE-cytomine-data
+    depends_on:
+      - §§INSTANCE-cytomine-data
+      
+  §§INSTANCE-cytomine-retrieval:
+    image: cytomine/retrieval:v1.1.1
+    container_name: §§INSTANCE-cytomine-retrieval
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
+    environment:
+      - IMS_URL1=
+      - IMS_URL2=
+      - RETRIEVAL_ENGINE=redis
+      - RETRIEVAL_PASSWD=retrieval_default
+    volumes_from: 
+      - §§INSTANCE-cytomine-data
+    depends_on:
+      - §§INSTANCE-cytomine-data
+      
+  §§INSTANCE-cytomine-iipOff:
+    image: cytomine/iipofficial:v1.1.1
+    container_name: §§INSTANCE-cytomine-iipOff
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
+    environment:
+      - NB_IIP_PROCESS=
+    volumes_from: 
+      - §§INSTANCE-cytomine-data
+    depends_on:
+      - §§INSTANCE-cytomine-data
+      
+  §§INSTANCE-cytomine-iipCyto:
+    image: cytomine/iipcyto:v1.1.1
+    container_name: §§INSTANCE-cytomine-iipCyto
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
+    environment:
+      - NB_IIP_PROCESS=
+    link:
+      - §§INSTANCE-cytomine-memcached:memcached
+    volumes_from: 
+      - §§INSTANCE-cytomine-data
+    depends_on:
+      - §§INSTANCE-cytomine-data
+      
+  §§INSTANCE-cytomine-bioformat:
+    image: cytomine/bioformat:v1.1.1
+    container_name: §§INSTANCE-cytomine-bioformat
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
+    environment:
+      - BIOFORMAT_PORT=
+    volumes_from: 
+      - §§INSTANCE-cytomine-data
+    depends_on:
+      - §§INSTANCE-cytomine-data
+      
+  §§INSTANCE-cytomine-ims:
+    image: cytomine/ims:v1.1.1
+    container_name: §§INSTANCE-cytomine-ims
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
+    volumes_from: 
+      - §§INSTANCE-cytomine-data
+    depends_on:
+      - §§INSTANCE-cytomine-data
+      
+  §§INSTANCE-cytomine-iris:
+    image: cytomine/iris:v1.1.1
+    container_name: §§INSTANCE-cytomine-iris
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
+    volumes_from: 
+      - §§INSTANCE-cytomine-data
+    depends_on:
+      - §§INSTANCE-cytomine-data
+      
+  §§INSTANCE-cytomine-software-router:
+    image: cytomine/software_router:v1.1.1
+    container_name: §§INSTANCE-cytomine-software-router
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
+    environment:
+      - CORE_URL=
+      - RABBITMQ_PUB_KEY=
+      - RABBITMQ_PRIV_KEY=
+    volumes_from: 
+      - §§INSTANCE-cytomine-data
+    depends_on:
+      - §§INSTANCE-cytomine-data
+
+  §§INSTANCE-cytomine-data:
     image: busybox
-    container_name: §§INSTANCE-app-data
+    container_name: §§INSTANCE-cytomine-data
     volumes:
-      - ./var/app-data:/var/app-data
-      - ./var/app-config:/var/app-config
+      - ./configs/memcached/memcached.conf:/etc/memcached.conf
+      - ./data/postgresql/var/lib/postgresql:/var/lib/postgresql
+      - ./data/mongodb/data/db:/data/db
+      - ./retrieval:/data/thumb
+      - ./configs/hosts/retrieval/addHosts.sh:/tmp/addHosts.sh
+      - ./configs/iipOff/nginx.conf:/tmp/nginx.conf
+      - ./configs/ims/imageserverconfig.properties:/usr/share/tomcat7/.grails/imageserverconfig.properties
+      - ./configs/core/cytomineconfig.groovy:/usr/share/tomcat7/.grails/cytomineconfig.groovy
+      - ./data/iris//var/lib/tomcat7/db:/var/lib/tomcat7/db
+      - ./configs/iris/iris-config.groovy:/usr/share/tomcat7/.grails/iris-config.groovy
+      - ./configs/iris/iris-production-config.groovy:/usr/share/tomcat7/.grails/iris-production-config.groovy
+      - ./configs/nginx/nginx.conf:/usr/local/nginx/conf/nginx.conf
+      - ./configs/software_router/config.groovy:/software_router/config.groovy

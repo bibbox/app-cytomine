@@ -1,14 +1,25 @@
 {
   "mappings": [
     {
-      "id": "§§PORT1",
+      "id": "§§§§PORTWEB",
       "url": "§§INSTANCE",
+      "protocol": "HTTP",
+      "proxy" : "PRIMARY"
+    },{
+      "id": "§§§§PORTMEMCACHED",
+      "url": "§§INSTANCE-mem",
       "protocol": "HTTP",
       "proxy" : "PRIMARY"
     },
     {
-      "id": "§§PORT2",
-      "url": "§§INSTANCE-monitoring",
+      "id": "§§PORTRABBITMQ1",
+      "url": "§§INSTANCE-rabbitmq1",
+      "protocol": "HTTP",
+      "proxy" : "PRIMARY"
+    },
+    {
+      "id": "§§PORTRABBITMQ2",
+      "url": "§§INSTANCE-rabbitmq1",
       "protocol": "HTTP",
       "proxy" : "PRIMARY"
     }

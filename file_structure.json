@@ -1,16 +1,56 @@
 {
     "makefolders":[
-        "var/app-config",
-        "var/app-data"
+        "data",
+        "configs",
+		"retrieval",
+		"configs/memcached",
+		"configs/iipOff",
+		"configs/iipCyto",
+		"configs/ims",
+		"configs/core",
+		"configs/iris",
+		"configs/nginx",
+		"configs/software_router",
+		"data/postgresql/var/lib/postgresql",
+		"data/iris//var/lib/tomcat7/db",
+		"data/mongodb/data/db"
     ],
     "copyfiles":[
         {
-            "source":"config/database/db.conf",
-            "destination":"var/app-config/db.conf"
+            "source":"configs/memcached/memcached.conf",
+            "destination":"configs/memcached/memcached.conf"
         },
         {
-            "source":"config/app-data/db.data",
-            "destination":"var/config/app-data/db.data"
+            "source":"configs/hosts/retrieval/addHosts.sh",
+            "destination":"configs/hosts/retrieval/addHosts.sh"
+        },
+        {
+            "source":"configs/iipOff/nginx.conf",
+            "destination":"configs/iipOff/nginx.conf"
+        },
+        {
+            "source":"configs/iipCyto/nginx.conf",
+            "destination":"configs/iipCyto/nginx.conf"
+        },
+        {
+            "source":"configs/core/cytomineconfig.groovy",
+            "destination":"configs/core/cytomineconfig.groovy"
+        },
+        {
+            "source":"configs/iris/iris-config.groovy",
+            "destination":"configs/iris/iris-config.groovy"
+        },
+        {
+            "source":"configs/iris/iris-production-config.groovy",
+            "destination":"configs/iris/iris-production-config.groovy"
+        },
+        {
+            "source":"configs/nginx/nginx.conf",
+            "destination":"configs/nginx/nginx.conf"
+        },
+        {
+            "source":"configs/software_router/config.groovy",
+            "destination":"configs/software_router/config.groovy"
         }
     ]
 }
