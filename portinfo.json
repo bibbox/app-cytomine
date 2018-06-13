@@ -5,11 +5,6 @@
       "url": "§§INSTANCE",
       "protocol": "HTTP",
       "proxy" : "PRIMARY"
-    },{
-      "id": "§§§§PORTMEMCACHED",
-      "url": "§§INSTANCE-mem",
-      "protocol": "HTTP",
-      "proxy" : "PRIMARY"
     },
     {
       "id": "§§PORTRABBITMQ1",

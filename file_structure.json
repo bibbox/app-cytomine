@@ -4,8 +4,7 @@
         "configs",
 		"retrieval",
 		"configs/memcached",
-		"configs/iipOff",
-		"configs/iipCyto",
+		"configs/iip",
 		"configs/ims",
 		"configs/core",
 		"configs/iris",
@@ -13,7 +12,10 @@
 		"configs/software_router",
 		"data/postgresql/var/lib/postgresql",
 		"data/iris//var/lib/tomcat7/db",
-		"data/mongodb/data/db"
+		"data/mongodb/data/db",
+		"data/ims/images",
+		"data/tmp/uploaded",
+		"data/algo"
     ],
     "copyfiles":[
         {
@@ -25,12 +27,8 @@
             "destination":"configs/hosts/retrieval/addHosts.sh"
         },
         {
-            "source":"configs/iipOff/nginx.conf",
-            "destination":"configs/iipOff/nginx.conf"
-        },
-        {
-            "source":"configs/iipCyto/nginx.conf",
-            "destination":"configs/iipCyto/nginx.conf"
+            "source":"configs/iip/nginx.conf",
+            "destination":"configs/iip/nginx.conf"
         },
         {
             "source":"configs/core/cytomineconfig.groovy",
@@ -51,6 +49,10 @@
         {
             "source":"configs/software_router/config.groovy",
             "destination":"configs/software_router/config.groovy"
+        },
+        {
+            "source":"configs/ims/imageserverconfig.properties",
+            "destination":"configs/ims/imageserverconfig.properties"
         }
     ]
 }

@@ -13,14 +13,9 @@ services:
     networks:
       - bibbox-default-network
     link:
-      - §§INSTANCE-cytomine-iris:iris
-      - §§INSTANCE-cytomine-ims:ims
-      - §§INSTANCE-cytomine-retrieval:retrieval
-      - §§INSTANCE-cytomine-iipCyto:iipCyto
-      - §§INSTANCE-cytomine-core:core
-      - §§INSTANCE-cytomine-iipOff:iipOff
-    ports:
-      - "§§PORTWEB:80"
+      - §§INSTANCE-cytomine-pgdb:postgresql
+      - §§INSTANCE-cytomine-mongodb:mongodb
+      - §§INSTANCE-cytomine-rabbitmq:rabbitmq
     volumes_from: 
       - §§INSTANCE-cytomine-data
     depends_on:
@@ -33,9 +28,14 @@ services:
     networks:
       - bibbox-default-network
     link:
-      - §§INSTANCE-cytomine-pgdb:postgresql
-      - §§INSTANCE-cytomine-mongodb:mongodb
-      - §§INSTANCE-cytomine-rabbitmq:rabbitmq
+      - §§INSTANCE-cytomine-iris:iris
+      - §§INSTANCE-cytomine-ims:ims
+      - §§INSTANCE-cytomine-retrieval:retrieval
+      - §§INSTANCE-cytomine-iipCyto:iipCyto
+      - §§INSTANCE-cytomine-core:core
+      - §§INSTANCE-cytomine-iipOff:iipOff
+    ports:
+      - "§§PORTWEB:80"
     volumes_from: 
       - §§INSTANCE-cytomine-data
     depends_on:
@@ -47,8 +47,6 @@ services:
     restart: unless-stopped
     networks:
       - bibbox-default-network
-    ports:
-      - "§§PORTMEMCACHED:11211"
     depends_on:
       - §§INSTANCE-cytomine-data
     volumes_from: 
@@ -100,8 +98,8 @@ services:
     networks:
       - bibbox-default-network
     environment:
-      - IMS_URL1=
-      - IMS_URL2=
+      - IMS_URL1=§§INSTANCE-ims
+      - IMS_URL2=§§INSTANCE-ims2
       - RETRIEVAL_ENGINE=redis
       - RETRIEVAL_PASSWD=retrieval_default
     volumes_from: 
@@ -116,7 +114,8 @@ services:
     networks:
       - bibbox-default-network
     environment:
-      - NB_IIP_PROCESS=
+      - NB_IIP_PROCESS=10
+    privileged: true
     volumes_from: 
       - §§INSTANCE-cytomine-data
     depends_on:
@@ -129,7 +128,8 @@ services:
     networks:
       - bibbox-default-network
     environment:
-      - NB_IIP_PROCESS=
+      - NB_IIP_PROCESS=10
+    privileged: true
     link:
       - §§INSTANCE-cytomine-memcached:memcached
     volumes_from: 
@@ -144,7 +144,7 @@ services:
     networks:
       - bibbox-default-network
     environment:
-      - BIOFORMAT_PORT=
+      - BIOFORMAT_PORT=4321
     volumes_from: 
       - §§INSTANCE-cytomine-data
     depends_on:
@@ -156,6 +156,8 @@ services:
     restart: unless-stopped
     networks:
       - bibbox-default-network
+    link:
+      - §§INSTANCE-cytomine-bioformat:bioformat
     volumes_from: 
       - §§INSTANCE-cytomine-data
     depends_on:
@@ -179,9 +181,12 @@ services:
     networks:
       - bibbox-default-network
     environment:
-      - CORE_URL=
-      - RABBITMQ_PUB_KEY=
-      - RABBITMQ_PRIV_KEY=
+      - CORE_URL=§§INSTANCE
+      - RABBITMQ_PUB_KEY=1111111111
+      - RABBITMQ_PRIV_KEY=2222222222
+    privileged: true
+    link:
+      - §§INSTANCE-cytomine-rabbitmq:rabbitmq
     volumes_from: 
       - §§INSTANCE-cytomine-data
     depends_on:
@@ -191,15 +196,17 @@ services:
     image: busybox
     container_name: §§INSTANCE-cytomine-data
     volumes:
-      - ./configs/memcached/memcached.conf:/etc/memcached.conf
       - ./data/postgresql/var/lib/postgresql:/var/lib/postgresql
       - ./data/mongodb/data/db:/data/db
+      - ./data/iris/var/lib/tomcat7/db:/var/lib/tomcat7/db
+      - ./data/ims/images:/data/images
+      - ./data/tmp/uploaded:/tmp/uploaded
+      - ./data/algo:/software_router/algo
       - ./retrieval:/data/thumb
-      - ./configs/hosts/retrieval/addHosts.sh:/tmp/addHosts.sh
-      - ./configs/iipOff/nginx.conf:/tmp/nginx.conf
+      - ./configs/memcached/memcached.conf:/etc/memcached.conf
+      - ./configs/iip/nginx.conf:/tmp/nginx.conf.sample
       - ./configs/ims/imageserverconfig.properties:/usr/share/tomcat7/.grails/imageserverconfig.properties
       - ./configs/core/cytomineconfig.groovy:/usr/share/tomcat7/.grails/cytomineconfig.groovy
-      - ./data/iris//var/lib/tomcat7/db:/var/lib/tomcat7/db
       - ./configs/iris/iris-config.groovy:/usr/share/tomcat7/.grails/iris-config.groovy
       - ./configs/iris/iris-production-config.groovy:/usr/share/tomcat7/.grails/iris-production-config.groovy
       - ./configs/nginx/nginx.conf:/usr/local/nginx/conf/nginx.conf
