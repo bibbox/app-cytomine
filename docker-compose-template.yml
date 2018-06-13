@@ -16,6 +16,9 @@ services:
       - §§INSTANCE-cytomine-pgdb:postgresql
       - §§INSTANCE-cytomine-mongodb:mongodb
       - §§INSTANCE-cytomine-rabbitmq:rabbitmq
+    environment:
+      - CORE_URL=xyz.blabla.com
+      - IMS_URL1=ims.test.de
     volumes_from: 
       - §§INSTANCE-cytomine-data
     depends_on:
