@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     networks:
       - bibbox-default-network
-    link:
+    links:
       - §§INSTANCE-cytomine-pgdb:postgresql
       - §§INSTANCE-cytomine-mongodb:mongodb
       - §§INSTANCE-cytomine-rabbitmq:rabbitmq
@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
     networks:
       - bibbox-default-network
-    link:
+    links:
       - §§INSTANCE-cytomine-iris:iris
       - §§INSTANCE-cytomine-ims:ims
       - §§INSTANCE-cytomine-retrieval:retrieval
@@ -98,8 +98,8 @@ services:
     networks:
       - bibbox-default-network
     environment:
-      - IMS_URL1=§§INSTANCE-ims
-      - IMS_URL2=§§INSTANCE-ims2
+      - IMS_URL1=§§INSTANCE-ims.ref.development.bibbox.org
+      - IMS_URL2=§§INSTANCE-ims2.ref.development.bibbox.org
       - RETRIEVAL_ENGINE=redis
       - RETRIEVAL_PASSWD=retrieval_default
     volumes_from: 
@@ -130,7 +130,7 @@ services:
     environment:
       - NB_IIP_PROCESS=10
     privileged: true
-    link:
+    links:
       - §§INSTANCE-cytomine-memcached:memcached
     volumes_from: 
       - §§INSTANCE-cytomine-data
@@ -156,7 +156,7 @@ services:
     restart: unless-stopped
     networks:
       - bibbox-default-network
-    link:
+    links:
       - §§INSTANCE-cytomine-bioformat:bioformat
     volumes_from: 
       - §§INSTANCE-cytomine-data
@@ -181,11 +181,11 @@ services:
     networks:
       - bibbox-default-network
     environment:
-      - CORE_URL=§§INSTANCE
+      - CORE_URL=§§INSTANCE.ref.development.bibbox.org
       - RABBITMQ_PUB_KEY=1111111111
       - RABBITMQ_PRIV_KEY=2222222222
     privileged: true
-    link:
+    links:
       - §§INSTANCE-cytomine-rabbitmq:rabbitmq
     volumes_from: 
       - §§INSTANCE-cytomine-data
