@@ -1,4 +1,4 @@
 {
-  runningcontainers:["§§INSTANCE-cytomine-memcached", "§§INSTANCE-cytomine-rabbitmq", "§§INSTANCE-cytomine-pgdb", "§§INSTANCE-cytomine-mongodb"],
-  supportcontainers:["§§INSTANCE-app-data"]    
+  runningcontainers:["§§INSTANCE-cytomine-memcached", "§§INSTANCE-cytomine-rabbitmq", "§§INSTANCE-cytomine-pgdb", "§§INSTANCE-cytomine-mongodb", "§§INSTANCE-cytomine-core", "§§INSTANCE-cytomine-nginx", "§§INSTANCE-cytomine-retrieval", "§§INSTANCE-cytomine-iipOff", "§§INSTANCE-cytomine-iipCyto", "§§INSTANCE-cytomine-bioformat", "§§INSTANCE-cytomine-ims", "§§INSTANCE-cytomine-iris", "§§INSTANCE-cytomine-software-router"],
+  supportcontainers:["§§INSTANCE-cytomine-data"]    
 }
